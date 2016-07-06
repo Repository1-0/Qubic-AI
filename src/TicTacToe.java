@@ -368,6 +368,22 @@ public class TicTacToe {
         
     }
     
+    /*
+    Driver method for the game consists of two main components: the setup and 
+    the actual execution of the game. Setup should contain at the miniumum 
+    the creation of a new TicTacToe object to perform initial board setup, two
+    AIs to play the game, and a variable that holds how many games are to be
+    played.
+    
+    After setup is complete, the game is started, with the AI executing a move
+    and checking to see if it has won. If not, the other AI moves and checks
+    for a victory state for itself. Play continues until either an AI wins or
+    there is a draw, at which point the board is reset along with any relevant
+    counters and the AI's analyze the board for piece location.
+    
+    Print statements are left in but commented out if you want to see every turn
+    and who wins (or draws) each game.
+    */
     public static void main(String[] args) {
         int a1Wins = 0; 
         int a2Wins = 0;
