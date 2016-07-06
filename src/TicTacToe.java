@@ -192,7 +192,6 @@ public class TicTacToe {
                             break;
                         }
                         else if(board[level][row][col] == token && level == (board[0][0].length - 1)){
-                            //System.out.println("Vertical Win");
                             return true;
                         }
                     }
@@ -212,7 +211,6 @@ public class TicTacToe {
                    break;
                }
                else if(board[level][row][col] == token && level == (board.length - 1)){
-                   //System.out.println("Diagonal 3D Win");
                    return true;
                }
                level++; 
@@ -226,7 +224,6 @@ public class TicTacToe {
                    break;
                }
                else if(board[level][row][col] == token && level == (board.length - 1)){
-                   //System.out.println("Diagonal 3D Win");
                    return true;
                }
                level++; 
@@ -240,7 +237,6 @@ public class TicTacToe {
                    break;
                }
                else if(board[level][row][col] == token && level == (board.length - 1)){
-                   //System.out.println("Diagonal 3D Win");
                    return true;
                }
                level++; 
@@ -254,7 +250,6 @@ public class TicTacToe {
                    break;
                }
                else if(board[level][row][col] == token && level == (board.length - 1)){
-                   //System.out.println("Diagonal 3D Win");
                    return true;
                }
                level++; 
@@ -268,7 +263,6 @@ public class TicTacToe {
                 break;
             }
             else if(board[level][row][col] == token && level == (board.length - 1)){
-                //System.out.println("Diagonal 3D Win 1");
                 return true;
             }
             level++; 
@@ -282,7 +276,6 @@ public class TicTacToe {
                 break;
             }
             else if(board[level][row][col] == token && level == (board.length - 1)){
-                //System.out.println("Diagonal 3D Win 2");
                 return true;
             }
             level++; 
@@ -295,7 +288,6 @@ public class TicTacToe {
                 break;
             }
             else if(board[level][row][col] == token && level == (board.length - 1)){
-                //System.out.println("Diagonal 3D Win 3");
                 return true;
             }
             level++; 
@@ -309,7 +301,6 @@ public class TicTacToe {
                 break;
             }
             else if(board[level][row][col] == token && level == (board.length - 1)){
-                //System.out.println("Diagonal 3D Win 4");
                 return true;
             }
             level++; 
