@@ -92,6 +92,7 @@ public class TicTacToe {
         potWinsEverySpace[3][3][3] = 7;
     }
     
+    //Creates clean game board and resets availability table
     public static void resetBoard(){
         board = new int[4][4][4];
         available = new boolean[4][4][4];
@@ -116,7 +117,14 @@ public class TicTacToe {
         }
         return false;
     }
-    
+    /*
+    Checks each level of the board for all possible victory combinations.
+    Logic flows the same way for all three posibilities. So for example, when it
+    checks for a horizontal victory, it will start on the left side of the board
+    and work its way right, comparing each space to the current player's token.
+    If any of the spaces do not contain the current player's token, it will move
+    on to the next possible row. 
+    */
     public static boolean checkLevel(int token){
         //check horizontal 2D
         for(int level = 0; level < board.length; level++){
@@ -127,7 +135,6 @@ public class TicTacToe {
                             break;
                         }
                         else if(board[level][row][col] == token && col == (board[0][0].length - 1)){
-                            //System.out.println("Horizontal Win");
                             return true;
                         }
                     }
@@ -143,37 +150,35 @@ public class TicTacToe {
                             break;
                         }
                         else if(board[level][row][col] == token && row == (board[0][0].length - 1)){
-                            //System.out.println("Vertical 2D Win");
                             return true;
                         }
                     }
                 }
             }
         }
-        //check diagonal 2D
+        //check diagonal 2D for each level
         for(int level = 0; level < board.length; level++){
            int row = 0, col = 0;
            boolean flag = false;
+           //Checks for diagonal victory starting in upper left corner
            while(!flag){
                if(board[level][row][col] != token){
                    break;
                }
                else if(board[level][row][col] == token && row == (board[0][0].length - 1)){
-                   //System.out.println("Diagonal 2D Win");
                    return true;
                }
                row++; 
                col++;
            }
-           flag = false;
            row = 0; 
            col = board[0][0].length - 1;
+           //Checks for diagonal victory starting in upper right corner
            while(!flag){
                if(board[level][row][col] != token){
                    break;
                }
                else if(board[level][row][col] == token && row == (board[0][0].length - 1)){
-                   //System.out.println("Diagonal 2D Win");
                    return true;
                }
                row++; 
@@ -183,6 +188,10 @@ public class TicTacToe {
         return false;
     }
     
+    /*
+    Similar to checkLevel's setup, iterates over each of the sixteen possible
+    win conditions for a four-in-a-row.
+    */
     public static boolean checkVertical(int token){
         for(int row = 0; row < board[0].length; row++){
             for(int col = 0; col < board[0][0].length; col++){
@@ -203,9 +212,11 @@ public class TicTacToe {
     
     public static boolean check3DDiagonal(int token){
         boolean flag = false;
+        //Checks for row diagonals, starting on one side of the board and working
+        //up(level) and across.
         for(int row = 0; row < board.length; row++){
+            //Starts on left side working up and to the right.
            int level = 0, col = 0;
-           
            while(!flag){
                if(board[level][row][col] != token){
                    break;
@@ -217,6 +228,7 @@ public class TicTacToe {
                col++;
            }
            
+           //starts on right side working up and to the left
            level = 0; 
            col = board[0][0].length - 1;
            while(!flag){
@@ -230,8 +242,11 @@ public class TicTacToe {
                col--;
            }
         }
+        //Similar to checking for row diagonals, but instead searching each 
+        //column.
         for(int col = 0; col < board.length; col++){
            int level = 0, row = 0;
+           //Starting on upper side of board working up(level) and down(row)
            while(!flag){
                if(board[level][row][col] != token){
                    break;
@@ -243,6 +258,7 @@ public class TicTacToe {
                row++;
            }
            
+           //Starting on lower side of board working up(both level and row)
            level = 0; 
            row = board[0][0].length - 1;
            while(!flag){
@@ -258,6 +274,12 @@ public class TicTacToe {
         }
         int level = 0; int row = 0; int col = 0;
         
+        /*
+        The four remaining while loops check for the diagonals starting from
+        the corners of the cube. Each while loop only checks for one diagonal as 
+        each diagonal will take up two corners.
+        */
+        //Starting on bottom level in upper left corner
         while(!flag){
             if(board[level][row][col] != token){
                 break;
@@ -269,6 +291,7 @@ public class TicTacToe {
             row++;
             col++;
         }
+        //Starting on bottom level in upper right corner
         level = 0; row = 0; col = board[0][0].length - 1;
         flag = false;
         while(!flag){
@@ -282,6 +305,7 @@ public class TicTacToe {
             row++;
             col--;
         }
+        //Starting bottom level in lower left corner
         level = 0; row = board[0].length - 1; col = 0;
         while(!flag){
             if(board[level][row][col] != token){
@@ -294,8 +318,8 @@ public class TicTacToe {
             row--;
             col++;
         }
+        //Starting bottom level in lower right corner
         level = 0; row = board[0].length - 1; col = board[0][0].length - 1;
-        
         while(!flag){
             if(board[level][row][col] != token){
                 break;
@@ -309,7 +333,9 @@ public class TicTacToe {
         }
         return false;
     }
-    
+    /*
+    Simply checks for draws by looking for any available space on the board
+    */
     public static boolean isDraw(){
         for(int level = 0; level < TicTacToe.board.length; level++){
             for(int row = 0; row < TicTacToe.board[0].length; row++){
@@ -322,7 +348,9 @@ public class TicTacToe {
         }
         return true;
     }
-    
+    /*
+    Custom print function to have all four levels print on one "line" with labels
+    */
     public static void printBoard(){
         System.out.println("Level: 1        Level: 2        Level: 3        Level: 4");
         
@@ -391,53 +419,7 @@ public class TicTacToe {
         System.out.println("A1 Wins: " + a1Wins);
         System.out.println("A2 Wins: " + a2Wins);
         System.out.println("Draws: " + (numGames - a1Wins - a2Wins));
-//        a1.printPercentage();
-//        a2.printPercentage();
-//        a1 = new GameAI(1,5,4);
-//        a1Wins = 0;
-//        a2Wins = 0;
-//        gameCount = 1;
-//        while(gameCount <= numGames){
-//            //System.out.println("Turn: " + turn);
-//            turn++;
-//            a1.run();
-//            //TicTacToe.printBoard();
-//            if(checkWin(a1.token)){
-//                //System.out.println("Player 1 wins");
-//                a1.update(a1.token);
-//                a2.update(a1.token);
-//                resetBoard();
-//                turn = 1;
-//                a1Wins++;
-//                gameCount++;
-//                continue;
-//            }
-//            a2.run();
-//            //TicTacToe.printBoard();
-//            if(checkWin(a2.token)){
-//                //System.out.println("Player 2 wins");
-//                a1.update(a2.token);
-//                a2.update(a2.token);
-//                resetBoard();
-//                turn = 1;
-//                gameCount++;
-//                a2Wins++;
-//            }
-//            else if(isDraw()){
-//                //System.out.println("draw");
-//                a1.update(-1);
-//                a2.update(-1);
-//                resetBoard();
-//                turn = 1;
-//                gameCount++;
-//            }
-//
-//       }
-//        System.out.println("A1 Wins: " + a1Wins);
-//        System.out.println("A2 Wins: " + a2Wins);
-//        System.out.println("Draws: " + (numGames - a1Wins - a2Wins));
-//        a1.printPercentage();
-//        a2.printPercentage();
+
     }
     
 }
