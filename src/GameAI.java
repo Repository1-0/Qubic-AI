@@ -211,39 +211,33 @@ public class GameAI {
             TicTacToe.available[coordinate.level][coordinate.row][coordinate.column] = true;
             //potWinsEverySpace = potWinsClone;
         }
-            double maxHeuristic = 0;
+            double maxHeuristic = -1000000;
             Coordinates maxCoord = null;
             for(int i = 0; i < returnList.size(); i++){
                 Coordinates coordinate = returnList.get(i);
                 if(coordinate.parent == null){
-                    for(Coordinates maxC : coordinateList){
-                        if(maxC.heuristic > max){
-                            maxHeuristic = maxC.heuristic;
-                            maxCoord = maxC;
-                        }
-                    }
-                    break;
+                    System.out.println("Missing parent for coordinate");
+                    System.exit(0);
                 }
-                if(coordinate.heuristic > max){
-                    maxHeuristic = coordinate.heuristic;
-                    for(Coordinates coord : coordinateList){
-                            if(coordinate.parent.level == coord.level && coordinate.parent.row == coord.row && coordinate.parent.column == coord.column){
-                                coord.heuristic += coordinate.heuristic;
-                                maxCoord = coord;
-                            }
-                        }
+                for(Coordinates coord : coordinateList){
+                    if(coordinate.parent.level == coord.level && coordinate.parent.row == coord.row && coordinate.parent.column == coord.column){
+                        coord.heuristic += coordinate.heuristic;
+                        break;
+                    }
                 }
             }
-            if(maxCoord == null){
-                for(Coordinates maxC : coordinateList){
-                        if(maxC.heuristic > max){
-                            maxHeuristic = maxC.heuristic;
-                            maxCoord = maxC;
-                        }
-                    }
+        for(Coordinates maxC : coordinateList){
+            if(maxC.heuristic > maxHeuristic){
+                maxHeuristic = maxC.heuristic;
+                maxCoord = maxC;
             }
-            token = curToken;
-            return maxCoord;
+        }
+        if(maxCoord == null){
+            System.out.println("Missing best move selection");
+            System.exit(0);
+        }
+        token = curToken;
+        return maxCoord;
         //remove randomness here
 //        if(coordinateList.size() > 1){
 //            int length = coordinateList.size();
@@ -257,6 +251,7 @@ public class GameAI {
 //        TicTacToe.board[l][r][c] = token;
 //        TicTacToe.available[l][r][c] = false;
     }
+    
     
     private int getOppToken(){
         int oppToken;
