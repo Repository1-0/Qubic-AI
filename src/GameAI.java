@@ -128,14 +128,95 @@ public class GameAI {
                 }
             }
         }
+        
         checkPlacement();
+        ArrayList<Coordinates> coordinateList = moveListGeneration(originalToken, curToken, parent);
+        
+        if(originalToken != curToken){
+            Coordinates tmp = coordinateList.get(0);
+            int l = tmp.getLevel();
+            int r = tmp.getRow();
+            int c = tmp.getColumn();
+            searchLevel--;
+            TicTacToe.board[l][r][c] = token;
+            TicTacToe.available[l][r][c] = false;
+            tmp = search(oppToken, searchLevel, originalToken, parent);
+            TicTacToe.board[l][r][c] = 0;
+            TicTacToe.available[l][r][c] = true;
+            return tmp;
+        }
+        if(searchLevel == 0){
+            double maxHeuristic = -1000000;
+            Coordinates maxCoord = null;
+            for(Coordinates coordinate : coordinateList){
+                if(heuristic[coordinate.level][coordinate.row][coordinate.column] > maxHeuristic){
+                    maxHeuristic = heuristic[coordinate.level][coordinate.row][coordinate.column];
+                    maxCoord = coordinate;
+                }
+            }
+            return maxCoord;
+        }
+        ArrayList<Coordinates> returnList = new ArrayList();
+        searchLevel--;
+        for(Coordinates coordinate : coordinateList){
+            TicTacToe.board[coordinate.level][coordinate.row][coordinate.column] = token;
+            TicTacToe.available[coordinate.level][coordinate.row][coordinate.column] = false;
+            if(searchLevel >= 1){
+                returnList.add(search(oppToken, searchLevel, originalToken, coordinate));
+            }
+            TicTacToe.board[coordinate.level][coordinate.row][coordinate.column] = 0;
+            TicTacToe.available[coordinate.level][coordinate.row][coordinate.column] = true;
+        }
+        double maxHeuristic = -1000000;
+        Coordinates maxCoord = null;
+        for(int i = 0; i < returnList.size(); i++){
+            Coordinates coordinate = returnList.get(i);
+            if(coordinate.parent == null){
+                System.out.println("Missing parent for coordinate");
+                System.exit(0);
+            }
+            for(Coordinates coord : coordinateList){
+                if(coordinate.parent.level == coord.level && coordinate.parent.row == coord.row && coordinate.parent.column == coord.column){
+                    coord.heuristic += coordinate.heuristic;
+                    break;
+                }
+            }
+        }
+        for(Coordinates maxC : coordinateList){
+            if(maxC.heuristic > maxHeuristic){
+                maxHeuristic = maxC.heuristic;
+                maxCoord = maxC;
+            }
+        }
+        if(maxCoord == null){
+            System.out.println("Missing best move selection");
+            System.exit(0);
+        }
+        token = curToken;
+        return maxCoord;
+        //remove randomness here
+//        if(coordinateList.size() > 1){
+//            int length = coordinateList.size();
+//            Random random = new Random();
+//            int chosen = random.nextInt(length);
+//            Coordinates chosenCoordinate = coordinateList.remove(chosen);
+//            l = chosenCoordinate.level;
+//            r = chosenCoordinate.row;
+//            c = chosenCoordinate.column;
+//        }
+//        TicTacToe.board[l][r][c] = token;
+//        TicTacToe.available[l][r][c] = false;
+    }
+    
+    private ArrayList<Coordinates> moveListGeneration(int originalToken, int curToken, Coordinates parent){
         double minMax = 1000000;
         double max = 0;
         ArrayList<Coordinates> coordinateList = new ArrayList();
+        Coordinates oppMove = null;
         int l = 0; int r = 0; int c = 0;
-        for(level = 0; level < TicTacToe.board.length; level++){
-            for(row = 0; row < TicTacToe.board[0].length; row++){
-                for(col = 0; col < TicTacToe.board[0][0].length; col++){
+        for(int level = 0; level < TicTacToe.board.length; level++){
+            for(int row = 0; row < TicTacToe.board[0].length; row++){
+                for(int col = 0; col < TicTacToe.board[0][0].length; col++){
                     if(TicTacToe.board[level][row][col] == 0){
                         heuristic[level][row][col] += checkPotentialPaths(level,row,col);
                         //potWinsEverySpace = potWinsClone.clone();
@@ -166,93 +247,20 @@ public class GameAI {
                         else if(originalToken != curToken){
                             if(heuristic[level][row][col] > max ){
                                 max = heuristic[level][row][col];
-                                l = level;
-                                r = row;
-                                c = col;
+                                oppMove = new Coordinates(level,row,col,parent, max);
                             }
                         }
                     }
                 }
             }
         }
-        if(originalToken != curToken){
-//            if(searchLevel == 0){
-//                return new Coordinates(l,r,c,null);
-//            }
-            searchLevel--;
-            TicTacToe.board[l][r][c] = token;
-            TicTacToe.available[l][r][c] = false;
-            Coordinates tmp = search(oppToken, searchLevel, originalToken, parent);
-            TicTacToe.board[l][r][c] = 0;
-            TicTacToe.available[l][r][c] = true;
-            //potWinsEverySpace = potWinsClone;
-            return tmp;
+        if(oppMove != null){
+            coordinateList.clear();
+            coordinateList.add(oppMove);
+            return coordinateList;
         }
-        if(searchLevel == 0){
-            double maxHeuristic = 0;
-            Coordinates maxCoord = null;
-            for(Coordinates coordinate : coordinateList){
-                if(heuristic[coordinate.level][coordinate.row][coordinate.column] > max){
-                    maxHeuristic = heuristic[coordinate.level][coordinate.row][coordinate.column];
-                    maxCoord = coordinate;
-                }
-            }
-            return maxCoord;
-        }
-        ArrayList<Coordinates> returnList = new ArrayList();
-        searchLevel--;
-        for(Coordinates coordinate : coordinateList){
-            TicTacToe.board[coordinate.level][coordinate.row][coordinate.column] = token;
-            TicTacToe.available[coordinate.level][coordinate.row][coordinate.column] = false;
-            if(searchLevel >= 1){
-                returnList.add(search(oppToken, searchLevel, originalToken, coordinate));
-            }
-            TicTacToe.board[coordinate.level][coordinate.row][coordinate.column] = 0;
-            TicTacToe.available[coordinate.level][coordinate.row][coordinate.column] = true;
-            //potWinsEverySpace = potWinsClone;
-        }
-            double maxHeuristic = -1000000;
-            Coordinates maxCoord = null;
-            for(int i = 0; i < returnList.size(); i++){
-                Coordinates coordinate = returnList.get(i);
-                if(coordinate.parent == null){
-                    System.out.println("Missing parent for coordinate");
-                    System.exit(0);
-                }
-                for(Coordinates coord : coordinateList){
-                    if(coordinate.parent.level == coord.level && coordinate.parent.row == coord.row && coordinate.parent.column == coord.column){
-                        coord.heuristic += coordinate.heuristic;
-                        break;
-                    }
-                }
-            }
-        for(Coordinates maxC : coordinateList){
-            if(maxC.heuristic > maxHeuristic){
-                maxHeuristic = maxC.heuristic;
-                maxCoord = maxC;
-            }
-        }
-        if(maxCoord == null){
-            System.out.println("Missing best move selection");
-            System.exit(0);
-        }
-        token = curToken;
-        return maxCoord;
-        //remove randomness here
-//        if(coordinateList.size() > 1){
-//            int length = coordinateList.size();
-//            Random random = new Random();
-//            int chosen = random.nextInt(length);
-//            Coordinates chosenCoordinate = coordinateList.remove(chosen);
-//            l = chosenCoordinate.level;
-//            r = chosenCoordinate.row;
-//            c = chosenCoordinate.column;
-//        }
-//        TicTacToe.board[l][r][c] = token;
-//        TicTacToe.available[l][r][c] = false;
+        return coordinateList;
     }
-    
-    
     private int getOppToken(){
         int oppToken;
         if(token == 1){
