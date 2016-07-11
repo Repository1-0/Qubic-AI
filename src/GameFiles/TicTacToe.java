@@ -347,6 +347,26 @@ public class TicTacToe {
     /*
     Custom print function to have all four levels print on one "line" with labels
     */
+    public static String printBoard(){
+        String returnString;
+        returnString = "Level: 1        Level: 2        Level: 3        Level: 4\n";
+        
+            for(int row = 0; row < board[0].length; row++){
+                for(int l = 0; l < board.length; l++){
+                    for(int col = 0; col < board[0][0].length; col++){
+                        returnString += board[l][row][col] + "  ";
+                    }
+                    returnString += "    ";
+                }
+                returnString += "\n";
+            }
+            returnString += "\n";
+            return returnString;
+        
+    }
+    /*
+    Custom print function to have all four levels print on one "line" with labels
+    */
     @Override
     public String toString(){
         String returnString;
