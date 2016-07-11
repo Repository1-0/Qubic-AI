@@ -30,7 +30,12 @@ public class GameAI {
         levelsToSearch = levels;
         nodeCount = nodecount;
     }
-    
+    /*
+    Pretty simple compared to the search function as it does most of the heavy
+    lifting. Checks to see if there is a move it can do right now to win or
+    block the opponent's imminent victory next turn. If no move is found it will
+    call the search function to find the best move and use it.
+    */
     public void run(){
         Coordinates move = checkWin();
         if(move != null){

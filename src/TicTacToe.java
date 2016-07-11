@@ -93,7 +93,7 @@ public class TicTacToe {
     }
     
     //Creates clean game board and resets availability table
-    public static void resetBoard(){
+    private static void resetBoard(){
         board = new int[4][4][4];
         available = new boolean[4][4][4];
         for(int level = 0; level < board.length; level++){
@@ -351,20 +351,22 @@ public class TicTacToe {
     /*
     Custom print function to have all four levels print on one "line" with labels
     */
-    public static void printBoard(){
-        System.out.println("Level: 1        Level: 2        Level: 3        Level: 4");
+    @Override
+    public String toString(){
+        String returnString;
+        returnString = "Level: 1        Level: 2        Level: 3        Level: 4\n";
         
             for(int row = 0; row < board[0].length; row++){
                 for(int l = 0; l < board.length; l++){
                     for(int col = 0; col < board[0][0].length; col++){
-                        System.out.print(board[l][row][col] + "  ");
+                        returnString += board[l][row][col] + "  ";
                     }
-                    System.out.print("    ");
+                    returnString += "    ";
                 }
-                System.out.println("");
+                returnString += "\n";
             }
-            System.out.println("");
-            System.out.println("");
+            returnString += "\n";
+            return returnString;
         
     }
     
@@ -391,13 +393,13 @@ public class TicTacToe {
         GameAI a1 = new GameAI(1, 5, 4);
         GameAI a2 = new GameAI(2, 5, 4);
         int turn = 1;
-        int numGames = 200;
+        int numGames = 100;
         while(gameCount <= numGames){
             
             //System.out.println("Turn: " + turn);
             turn++;
             a1.run();
-            //TicTacToe.printBoard();
+            //System.out.println(game);
             if(checkWin(a1.token)){
                 System.out.println("Game: " + gameCount + "    ");
                 //System.out.println("Player 1 wins");
@@ -410,7 +412,7 @@ public class TicTacToe {
                 continue;
             }
             a2.run();
-            //TicTacToe.printBoard();
+            //System.out.println(game);
             if(checkWin(a2.token)){
                 System.out.println("Game: " + gameCount + "    ");
                 //System.out.println("Player 2 wins");
