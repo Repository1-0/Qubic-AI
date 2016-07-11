@@ -147,6 +147,7 @@ public class TicTacToeTest {
         boolean expResult = true;
         boolean result = false;
         int[][][] board = TicTacToe.board;
+        //Tests for diagonals going across a row
         for(int row = 0; row < board.length; row++){
             //Starts on left side working up and to the right.
             int level = 0, column = 0;
@@ -178,6 +179,112 @@ public class TicTacToeTest {
                 board[level][row][column] = 0;
                 column++;
             }
+        }
+        //Tests for diagonals going down a column
+        for(int column = 0; column < board.length; column++){
+            //Starts on the top side working up(3D) and down(2D) the board
+            int level = 0, row = 0;
+            while(level < board.length && row < board[0][0].length){
+                board[level][row][column] = token;
+                level++; 
+                row++;
+            }
+            result = TicTacToe.check3DDiagonal(token);
+            assertEquals(expResult, result);
+            while(level > 0 && row > 0){
+                level--; 
+                row--;
+                board[level][row][column] = 0;
+                
+            }
+            //starts on the bottom side working up(both in level and row)
+            level = 0; 
+            row = board[0][0].length;
+            while(level < board.length && row > 0){
+                row--;
+                board[level][row][column] = token;
+                level++; 
+            }
+            result = TicTacToe.check3DDiagonal(token);
+            assertEquals(expResult, result);
+            while(level > 0 && row < board[0][0].length){
+                level--; 
+                board[level][row][column] = 0;
+                row++;
+            }
+        }
+       
+        /*
+        The four remaining while loops check for the diagonals starting from
+        the corners of the cube. Each while loop only checks for one diagonal as 
+        each diagonal will take up two corners.
+        */
+        int level = 0; int row = 0; int column = 0;
+        //Starting on bottom level in upper left corner
+        while(level < board.length && row < board[0].length &&  column < board[0][0].length){
+            board[level][row][column] = token;
+            level++; 
+            row++;
+            column++;
+        }
+        result = TicTacToe.check3DDiagonal(token);
+        assertEquals(expResult, result);
+        while(level > 0 && row > 0 && column > 0){
+            level--;
+            row--;
+            column--;
+            board[level][row][column] = 0;
+        }
+        
+        //Starting on the top level in the upper left corner
+        level = board.length; row = 0; column = 0;
+        while(level > 0 && row < board[0].length && column < board[0][0].length){
+            level--;
+            board[level][row][column] = token;
+            row++;
+            column++;
+        }
+        result = TicTacToe.check3DDiagonal(token);
+        assertEquals(expResult, result);
+        while(level < board.length && row > 0 && column > 0){
+            row--;
+            column--;
+            board[level][row][column] = 0;
+            level++;
+        }
+        
+        //Starting on the bottom level in the lower left corner
+        level = 0; row = board[0].length; column = 0;
+        while(level < board.length && row > 0 && column < board[0][0].length){
+            row--;
+            board[level][row][column] = token;
+            level++;
+            column++;
+        }
+        result = TicTacToe.check3DDiagonal(token);
+        assertEquals(expResult, result);
+        while(level > 0 && row < board[0].length && column > 0){
+            column--;
+            level--;
+            board[level][row][column] = 0;
+            row++;
+        }
+        
+        //Starting on the top level in the lower left corner
+        level = board.length; row = board[0].length; column = 0;
+        while(level > 0 && row > 0 && column < board[0][0].length){
+            row--;
+            level--;
+            board[level][row][column] = token;
+            column++;
+        }
+        result = TicTacToe.check3DDiagonal(token);
+        assertEquals(expResult, result);
+        while(level < board.length && row < board[0].length && column > 0){
+            column--;
+            board[level][row][column] = 0;
+            level++;
+            row++;
         }
     }
 
