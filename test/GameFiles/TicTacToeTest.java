@@ -111,29 +111,6 @@ public class TicTacToeTest {
 //        assertEquals(expResult, result);
 //        fail("The test case is a prototype.");
 //    }
-//
-//    /**
-//     * Test of toString method, of class TicTacToe.
-//     */
-//    @Test
-//    public void testToString() {
-//        System.out.println("toString");
-//        TicTacToe instance = new TicTacToe();
-//        String expResult = "";
-//        String result = instance.toString();
-//        assertEquals(expResult, result);
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of main method, of class TicTacToe.
-//     */
-//    @Test
-//    public void testMain() {
-//        System.out.println("main");
-//        String[] args = null;
-//        TicTacToe.main(args);
-//        fail("The test case is a prototype.");
-//    }
+
     
 }
