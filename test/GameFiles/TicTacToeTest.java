@@ -56,7 +56,54 @@ public class TicTacToeTest {
             }
         }
     }
-
+    /**
+     * Test of checkLevel method, of class TicTacToe. Testing for Diagonals
+     */
+    @Test
+    public void testCheckLevel2DDiagonals() {
+        System.out.println("checkLevel2DDiagonals");
+        TicTacToe game = new TicTacToe();
+        int token = 1;
+        boolean expResult = true;
+        boolean result = false;
+        int[][][] board = TicTacToe.board;
+        //Tests diagonal path on level starting in upper left corner going to
+        //the bottom right corner
+        for(int level = 0; level < board.length; level++){
+            int row = 0;
+            int column = 0;
+            while(row < board[0].length && column < board[0][0].length){
+                board[level][row][column] = token;
+                row++;
+                column++;
+            }
+            result = TicTacToe.checkLevel(token);
+            assertEquals(expResult, result);
+            while(row > 0 && column > 0){
+                row--;
+                column--;
+                board[level][row][column] = 0;
+            }
+        }
+        //Tests diagonal path on level starting in upper right corner going to
+        //the bottom left corner
+        for(int level = 0; level < board.length; level++){
+            int row = 0;
+            int column = board[0][0].length;
+            while(row < board[0].length && column > 0){
+                column--;
+                board[level][row][column] = token;
+                row++;
+            }
+            result = TicTacToe.checkLevel(token);
+            assertEquals(expResult, result);
+            while(row > 0 && column < board[0][0].length){
+                row--;
+                board[level][row][column] = 0;
+                column++;
+            }
+        }
+    }
     /**
      * Test of checkVertical method, of class TicTacToe.
      */
@@ -85,21 +132,55 @@ public class TicTacToeTest {
                 }
             }
         }
+        
+        
     }
 
-//    /**
-//     * Test of check3DDiagonal method, of class TicTacToe.
-//     */
-//    @Test
-//    public void testCheck3DDiagonal() {
-//        System.out.println("check3DDiagonal");
-//        int token = 0;
-//        boolean expResult = false;
-//        boolean result = TicTacToe.check3DDiagonal(token);
-//        assertEquals(expResult, result);
-//        fail("The test case is a prototype.");
-//    }
-//
+    /**
+     * Test of check3DDiagonal method, of class TicTacToe.
+     */
+    @Test
+    public void testCheck3DDiagonal() {
+        System.out.println("check3DDiagonal");
+        TicTacToe game = new TicTacToe();
+        int token = 1;
+        boolean expResult = true;
+        boolean result = false;
+        int[][][] board = TicTacToe.board;
+        for(int row = 0; row < board.length; row++){
+            //Starts on left side working up and to the right.
+            int level = 0, column = 0;
+            while(level < board.length && column < board[0][0].length){
+                board[level][row][column] = token;
+                level++; 
+                column++;
+            }
+            result = TicTacToe.check3DDiagonal(token);
+            assertEquals(expResult, result);
+            while(level > 0 && column > 0){
+                level--; 
+                column--;
+                board[level][row][column] = 0;
+                
+            }
+            //starts on right side working up and to the left
+            level = 0; 
+            column = board[0][0].length;
+            while(level < board.length && column > 0){
+                column--;
+                board[level][row][column] = token;
+                level++; 
+            }
+            result = TicTacToe.check3DDiagonal(token);
+            assertEquals(expResult, result);
+            while(level > 0 && column < board[0][0].length){
+                level--; 
+                board[level][row][column] = 0;
+                column++;
+            }
+        }
+    }
+
 //    /**
 //     * Test of isDraw method, of class TicTacToe.
 //     */

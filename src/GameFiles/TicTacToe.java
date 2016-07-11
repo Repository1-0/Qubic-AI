@@ -1,8 +1,4 @@
-
-
-
-
-
+package GameFiles;
 
 public class TicTacToe {
 
@@ -216,61 +212,61 @@ public class TicTacToe {
         //up(level) and across.
         for(int row = 0; row < board.length; row++){
             //Starts on left side working up and to the right.
-           int level = 0, col = 0;
-           while(!flag){
-               if(board[level][row][col] != token){
-                   break;
-               }
-               else if(board[level][row][col] == token && level == (board.length - 1)){
-                   return true;
-               }
-               level++; 
-               col++;
-           }
+            int level = 0, col = 0;
+            while(!flag){
+                if(board[level][row][col] != token){
+                    break;
+                }
+                else if(board[level][row][col] == token && level == (board.length - 1)){
+                    return true;
+                }
+                level++; 
+                col++;
+            }
            
-           //starts on right side working up and to the left
-           level = 0; 
-           col = board[0][0].length - 1;
-           while(!flag){
-               if(board[level][row][col] != token){
-                   break;
-               }
-               else if(board[level][row][col] == token && level == (board.length - 1)){
-                   return true;
-               }
-               level++; 
-               col--;
-           }
+            //starts on right side working up and to the left
+            level = 0; 
+            col = board[0][0].length - 1;
+            while(!flag){
+                if(board[level][row][col] != token){
+                    break;
+                }
+                else if(board[level][row][col] == token && level == (board.length - 1)){
+                    return true;
+                }
+                level++; 
+                col--;
+            }
         }
         //Similar to checking for row diagonals, but instead searching each 
         //column.
         for(int col = 0; col < board.length; col++){
-           int level = 0, row = 0;
-           //Starting on upper side of board working up(level) and down(row)
-           while(!flag){
-               if(board[level][row][col] != token){
-                   break;
-               }
-               else if(board[level][row][col] == token && level == (board.length - 1)){
-                   return true;
-               }
-               level++; 
-               row++;
-           }
+            int level = 0, row = 0;
+            //Starting on upper side of board working up(level) and down(row)
+            while(!flag){
+                if(board[level][row][col] != token){
+                    break;
+                }
+                else if(board[level][row][col] == token && level == (board.length - 1)){
+                    return true;
+                }
+                level++; 
+                row++;
+            }
            
-           //Starting on lower side of board working up(both level and row)
-           level = 0; 
-           row = board[0][0].length - 1;
-           while(!flag){
-               if(board[level][row][col] != token){
-                   break;
-               }
-               else if(board[level][row][col] == token && level == (board.length - 1)){
-                   return true;
-               }
-               level++; 
-               row--;
-           }
+            //Starting on lower side of board working up(both level and row)
+            level = 0; 
+            row = board[0][0].length - 1;
+            while(!flag){
+                if(board[level][row][col] != token){
+                    break;
+                }
+                else if(board[level][row][col] == token && level == (board.length - 1)){
+                    return true;
+                }
+                level++; 
+                row--;
+            }
         }
         int level = 0; int row = 0; int col = 0;
         
