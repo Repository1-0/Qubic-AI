@@ -1,7 +1,8 @@
+package GameFiles;
+
 
 import java.util.ArrayList;
 import java.util.Random;
-
 
 public class GameAI {
     
@@ -87,40 +88,13 @@ public class GameAI {
             }
             return move;
         }
-        //Check to see if the opponent wins
-        move = checkOpponentWin();
-        if(move != null){
-           
-            level = move.getLevel();
-            row = move.getRow();
-            col = move.getColumn();
-            if(searchLevel != 0){
-                searchLevel--;
-            }
-            TicTacToe.board[level][row][col] = token;
-            TicTacToe.available[level][row][col] = false;
-            Coordinates tmp;
-            if(curToken == originalToken){
-                    Coordinates currentCoor = new Coordinates(level,row,col,parent,0);
-                    tmp = search(oppToken,searchLevel, originalToken, currentCoor);
-                    
-                    currentCoor.adjustHeuristic(potWinsEverySpace[level][row][col]);
-                    currentCoor.adjustHeuristic(checkPotentialPaths(level,row,col));
-                    currentCoor.adjustHeuristic(4 * winPercentage[level][row][col]);
-                    currentCoor.adjustHeuristic(tmp.heuristic);
-                    
-                    TicTacToe.board[level][row][col] = 0;
-                    TicTacToe.available[level][row][col] = true;
-                    return currentCoor;
-            }
-            else{
-                tmp = search(oppToken,searchLevel, originalToken, parent);
-                TicTacToe.board[level][row][col] = 0;
-                TicTacToe.available[level][row][col] = true;
-                return tmp;
-            }
-            
+        //Need to check to see if the opponent wins, method handles both players
+        //and performs recursive calls
+        Coordinates oppPotentialWin = ifOpponentWins(originalToken,curToken,searchLevel,parent);
+        if(oppPotentialWin != null){
+            return oppPotentialWin;
         }
+        
         if(TicTacToe.isDraw()){
             return new Coordinates(0,0,0, parent, 1);
         }
@@ -212,6 +186,46 @@ public class GameAI {
 //        TicTacToe.board[l][r][c] = token;
 //        TicTacToe.available[l][r][c] = false;
     }
+    
+    private Coordinates ifOpponentWins(int originalToken, int curToken, int searchLevel, Coordinates parent){
+        Coordinates move = checkOpponentWin();
+        int level, row, col;
+        int oppToken = getOppToken();
+        if(move != null){
+           
+            level = move.getLevel();
+            row = move.getRow();
+            col = move.getColumn();
+            if(searchLevel != 0){
+                searchLevel--;
+            }
+            TicTacToe.board[level][row][col] = token;
+            TicTacToe.available[level][row][col] = false;
+            Coordinates tmp;
+            if(curToken == originalToken){
+                    Coordinates currentCoor = new Coordinates(level,row,col,parent,0);
+                    tmp = search(oppToken,searchLevel, originalToken, currentCoor);
+                    
+                    currentCoor.adjustHeuristic(potWinsEverySpace[level][row][col]);
+                    currentCoor.adjustHeuristic(checkPotentialPaths(level,row,col));
+                    currentCoor.adjustHeuristic(4 * winPercentage[level][row][col]);
+                    currentCoor.adjustHeuristic(tmp.heuristic);
+                    
+                    TicTacToe.board[level][row][col] = 0;
+                    TicTacToe.available[level][row][col] = true;
+                    return currentCoor;
+            }
+            else{
+                tmp = search(oppToken,searchLevel, originalToken, parent);
+                TicTacToe.board[level][row][col] = 0;
+                TicTacToe.available[level][row][col] = true;
+                return tmp;
+            }
+            
+        }
+        return null;
+    }
+
     
     private ArrayList<Coordinates> moveListGeneration(int originalToken, int curToken, Coordinates parent){
         double minMax = 1000000;
