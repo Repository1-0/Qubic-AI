@@ -232,7 +232,6 @@ public class GameAI {
         double max = 0;
         ArrayList<Coordinates> coordinateList = new ArrayList();
         Coordinates oppMove = null;
-        int l = 0; int r = 0; int c = 0;
         for(int level = 0; level < TicTacToe.board.length; level++){
             for(int row = 0; row < TicTacToe.board[0].length; row++){
                 for(int col = 0; col < TicTacToe.board[0][0].length; col++){
