@@ -58,9 +58,14 @@ public class GameAI {
         TicTacToe.board[move.level][move.row][move.column] = token;
         TicTacToe.available[move.level][move.row][move.column] = false;
     }
-    
+    /*
+    Primary function which does most of the heavy lifting. General logic flow is
+    to check if you or your opponent wins, and if not search for your or your
+    opponent's move.
+    */
     public Coordinates search(int curToken, int searchLevel, int originalToken, Coordinates parent){
         //last move in the search and it's the AI's opponent
+        //The only thing we care about at this point is if the opponent can win
         if(searchLevel <= 0 && curToken != originalToken){
             Coordinates move = checkWin();
             if(move != null){
@@ -89,7 +94,7 @@ public class GameAI {
             return move;
         }
         //Need to check to see if the opponent wins, method handles both players
-        //and performs recursive calls
+        //and performs recursive calls to search function to continue.
         Coordinates oppPotentialWin = ifOpponentWins(originalToken,curToken,searchLevel,parent);
         if(oppPotentialWin != null){
             return oppPotentialWin;
@@ -99,6 +104,7 @@ public class GameAI {
             return new Coordinates(0,0,0, parent, 1);
         }
         
+        //Breaks if changed to simply clone array, need to find problem.
         heuristic = new double[4][4][4];
         for(level = 0; level < TicTacToe.board.length; level++){
             for(row = 0; row < TicTacToe.board[0].length; row++){
@@ -107,10 +113,21 @@ public class GameAI {
                 }
             }
         }
-        
+        //Function checks each space to see if it is available and updates the
+        //heuristic value accordingly
         checkPlacement();
         ArrayList<Coordinates> coordinateList = moveListGeneration(originalToken, curToken, parent);
         
+        //Note: try to move the following logic into separate helper function.
+        
+        /*If it is the opponents turn the coordinateList should only contain one
+        move. This is necessary to cut down on the search cost as we already
+        search X(nodeCount) number of moves for the current player, doing the same
+        for the opponent would drastically reduce efficiency as the runtime would
+        be O(X^2). Cutting out the expansion of the opponent's move set does mean
+        a reduction in accuracy as it assume the opponent only looks at the best
+        current move with no regard for the future.
+        */
         if(originalToken != curToken){
             Coordinates tmp = coordinateList.get(0);
             int l = tmp.getLevel();
@@ -124,6 +141,7 @@ public class GameAI {
             TicTacToe.available[l][r][c] = true;
             return tmp;
         }
+        
         if(searchLevel == 0){
             double maxHeuristic = -1000000;
             Coordinates maxCoord = null;
